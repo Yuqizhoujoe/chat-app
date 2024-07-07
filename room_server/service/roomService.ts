@@ -19,7 +19,7 @@ export const createRoom = async (roomData: RoomData): Promise<RoomModel> => {
 }
 
 export const getRoom = async (roomId: string): Promise<RoomModel | null> => {
-    const room = await Room.findById(roomId);
+    const room = await Room.findOne({ roomId: roomId });
     return room;
 }
 
@@ -31,11 +31,12 @@ export const getRooms = async (): Promise<RoomModel[]> => {
 export const joinRoom = async (roomId: string, username: string): Promise<RoomModel> => {
     const userResponse: AxiosResponse<UserModel> = await axios.get<UserModel>(`/users/${username}`);
     const user = userResponse.data;
+
     if (!user) {
         throw Error(`USER_NOT_FOUND_${username}`);
     }
 
-    const room = await Room.findById(roomId);
+    const room = await Room.findOne({ roomId });
     if (!room) {
         throw Error(`ROOM_NOT_FOUND_${roomId}`);
     }
