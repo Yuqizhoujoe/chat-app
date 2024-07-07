@@ -1,9 +1,9 @@
-package-lock.json
 
 # Node.js
 node_modules/
 npm-debug.log
 .env
+package-lock.json
 
 # Logs
 logs
@@ -45,6 +45,8 @@ bower_components
 # Other
 *.swp
 
+# Java
 .gradle
 build
 gradle/
+.build
