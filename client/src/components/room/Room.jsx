@@ -9,6 +9,10 @@ import io from "socket.io-client";
 import "./Room.css";
 import { useAuthContext } from "../../AuthContext";
 
+// Components
+import UserList from "./UserList";
+import ChatWindow from "./ChatWindow";
+
 // Graphql
 const ROOM = gql`
   query GetRoom($roomId: ID!) {
@@ -205,8 +209,13 @@ const Room = () => {
   return (
     <div className="room-container">
       {renderRoomInfo()}
-      {renderChatWindow()}
-      {renderUserList()}
+      <ChatWindow
+        messages={messages}
+        sendMessage={sendMessage}
+        messageOnChange={(e) => setNewMessage(e.target.value)}
+        newMessage={newMessage}
+      />
+      <UserList users={users} />
     </div>
   );
 };

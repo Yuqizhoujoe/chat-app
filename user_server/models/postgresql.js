@@ -1,10 +1,15 @@
 import { Sequelize } from "sequelize";
 import { retry } from "../util.js";
 
-const sequelize = new Sequelize("chat-node-app", "damnjoejoe", "", {
-  host: "localhost",
-  dialect: "postgres",
-});
+const sequelize = new Sequelize(
+  process.env.POSTGRES_DB,
+  process.env.POSTGRES_USERNAME,
+  "",
+  {
+    host: process.env.POSTGRES_HOST,
+    dialect: process.env.POSTGRES_DIALECT,
+  }
+);
 
 const connectPostgre = async () => {
   const connect = () => sequelize.sync();

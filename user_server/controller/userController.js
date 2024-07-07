@@ -27,7 +27,6 @@ const verifyToken = (req, res, next) => {
 const signUp = async (req, res) => {
   try {
     const userData = await mapUserSignUpData(req);
-    console.log("USER_CONTROLLER_SIGN_UP_INPUT: ", userData);
     const user = await User.create({
       ...userData,
     });
@@ -42,7 +41,6 @@ const signUp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const userData = mapUserLoginData(req);
-    console.log("USER_CONTROLLER_LOGIN_DATA_INPUT: ", userData);
 
     // find user by email
     const existedUser = await User.findOne({
@@ -68,7 +66,6 @@ const login = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    console.log(`${USER_CONTROLLER}_LOGIN_USER: `, { token, existedUser });
     return res.status(200).json({
       token,
       user: {
@@ -85,10 +82,8 @@ const login = async (req, res) => {
 
 const getUserById = async (req, res) => {
   try {
-    console.log(`${USER_CONTROLLER}_USER_PARAMS: `, req.params);
     const { userId } = req.params;
     const user = await User.findByPk(userId);
-    console.log(`${USER_CONTROLLER}_GET_USER_RESULT: `, user);
 
     if (!user) {
       return res.status(404).json({ error: "User not found!" });
@@ -101,7 +96,26 @@ const getUserById = async (req, res) => {
   }
 };
 
-router.get("/:userId", verifyToken, getUserById);
+const getUserByUsername = async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({
+      where: { username },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found!" });
+    }
+
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error("USER_CONTROLLER_GET_USERNAME_ERROR: ", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// router.get("/:userId", getUserById);
+router.get("/:username", getUserByUsername);
 router.post("/signup", upload.single("avatar"), signUp);
 router.post("/login", login);
 
