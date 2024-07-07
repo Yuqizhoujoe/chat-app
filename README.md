@@ -4,10 +4,12 @@
 - React
 - Node.js
 - Spring
+- Express.js
 
 ## Language
 - Java
 - JavaScript
+- TypeScript
 
 ## API
 - REST API
